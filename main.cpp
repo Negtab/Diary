@@ -1,0 +1,215 @@
+#include <iostream>
+#include <windows.h>
+#include "Calendar.h"
+#include "Diary.h"
+#include "MainTypes/Note.h"
+#include "MainTypes/Event.h"
+#include "MainTypes/Reminder.h"
+#include "Managers/SecurityManager.h"
+#include "Managers/InputManager.h"
+
+int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
+    SecurityManager sec;
+    sec.loadPassword();
+
+    if (!sec.login())
+    {
+        std::cout << "Неверный пароль.\n";
+        return 0;
+    }
+
+    Diary diary;
+    bool isExit = false;
+    do
+    {
+        std::cout
+        << "+------------------------------+\n"
+        << "|            Меню              |\n"
+        << "+------------------------------+\n"
+        << "| 1. Добавить заметку          |\n"
+        << "| 2. Добавить событие          |\n"
+        << "| 3. Добавить напоминание      |\n"
+        << "+------------------------------+\n"
+        << "| 4. Показать все              |\n"
+        << "| 5. Удалить                   |\n"
+        << "| 6. Изменить                  |\n"
+        << "| 7. Отменить действие         |\n"
+        << "+------------------------------+\n"
+        << "| 8. Календарь                 |\n"
+        << "| 9. Изменить пароль           |\n"
+        << "+------------------------------+\n"
+        << "| Перед загрузкой данные       |\n"
+        << "| будут стерты                 |\n"
+        << "+------------------------------+\n"
+        << "| 10. Сохранить зашифровано    |\n"
+        << "| 11. Загрузить зашифровано    |\n"
+        << "| 12. Сохранить текстом        |\n"
+        << "| 13. Загрузить текстом        |\n"
+        << "+------------------------------+\n"
+        << "| 0. Выход                     |\n"
+        << "+------------------------------+\n";
+
+        int choice = InputManager::inputInt("Выбор: ", 0, 13);
+        switch (choice)
+        {
+            case 0: isExit = true; break;
+            case 1:
+            {
+                system("cls");
+
+                int id = InputManager::inputInt("ID: ", 0, 9999);
+                std::string title = InputManager::inputString("Заголовок: ");
+                std::string text = InputManager::inputString("Текст: ");
+                diary.add(new Note(id, title, text));
+                break;
+            }
+            case 2:
+            {
+                system("cls");
+
+                int id = InputManager::inputInt("ID: ", 0, 9999);
+                std::string title = InputManager::inputString("Заголовок: ");
+
+                std::cout << "Дата:" << "\n";
+                int d {0}, m {0}, y {0};
+                while (true)
+                {
+                    d = InputManager::inputInt("День: ", 1, 31);
+                    m = InputManager::inputInt("Месяц: ", 1, 12);
+                    y = InputManager::inputInt("Год: ", 1900, 3000);
+
+                    if (InputManager::isValidDate(d, m, y))
+                        break;
+                    std::cout << "Неверная дата\nПроверьте не поставили ли Вы:\n -прошедшую дату\n -несуществующую дату\n -дату после 3000 года" << std::endl;
+                }
+
+                diary.add(new Event(id, title, (std::to_string(d) + "." + std::to_string(m) + "." + std::to_string(y))));
+                break;
+            }
+            case 3:
+            {
+                system("cls");
+
+                int id = InputManager::inputInt("ID: ", 0, 9999);
+                std::string title = InputManager::inputString("Заголовок: ");
+
+                std::cout << "Дата:" << "\n";
+                int d {0}, m {0}, y {0};
+                while (true)
+                {
+                    d = InputManager::inputInt("День: ", 1, 31);
+                    m = InputManager::inputInt("Месяц: ", 1, 12);
+                    y = InputManager::inputInt("Год: ", 1900, 3000);
+
+                    if (InputManager::isValidDate(d, m, y))
+                        break;
+                    std::cout << "Неверная дата\nПроверьте не поставили ли Вы:\n -прошедшую дату\n -несуществующую дату\n -дату после 3000 года" << std::endl;
+                }
+
+                std::string time;
+                do
+                {
+                    time = InputManager::inputString("Время оповещения: ");
+                }while (!InputManager::isValidTime(time));
+
+                diary.add(new Reminder(id, title, (std::to_string(d) + "." + std::to_string(m) + "." + std::to_string(y)),time));
+                break;
+            }
+            case 4:
+            {
+                system("cls");
+
+                diary.list();
+                break;
+            }
+            case 5:
+            {
+                system("cls");
+
+                int id = InputManager::inputInt("ID: ", 0, 9999);
+                diary.remove(id);
+
+                break;
+            }
+            case 6:
+            {
+                system("cls");
+
+                int id = InputManager::inputInt("ID: ", 0, 9999);
+                diary.edit(id);
+
+                break;
+            }
+            case 7:
+            {
+                system("cls");
+
+                diary.undo();
+                break;
+            }
+            case 8:
+            {
+                system("cls");
+
+                int month = InputManager::inputInt("Месяц: ", 0, 12);
+                int year = InputManager::inputInt("Год: ", 1900, 3000);
+
+                Calendar::printMonth(month,year, diary.items);
+                break;
+            }
+            case 9:
+            {
+                system("cls");
+
+                sec.changePassword();
+
+                break;
+            }
+            case 10:
+            {
+                system("cls");
+
+                std::string pathToFile = InputManager::inputString("Введите путь к файлу: ");
+                StorageManager::save(diary.items, pathToFile);
+
+                break;
+            }
+            case 11:
+            {
+                system("cls");
+
+
+                std::string pathToFile = InputManager::inputString("Введите путь к файлу: ");
+                diary.clear();
+                StorageManager::load(diary.items, pathToFile);
+
+                break;
+            }
+
+            case 12:
+            {
+                system("cls");
+
+                std::string pathToFile = InputManager::inputString("Введите путь к файлу: ");
+                StorageManager::saveTxt(diary.items, pathToFile);
+
+                break;
+            }
+            case 13:
+            {
+                system("cls");
+
+                std::string pathToFile = InputManager::inputString("Введите путь к файлу: ");
+                diary.clear();
+                StorageManager::loadTxt(diary.items, pathToFile);
+
+                break;
+            }
+            default: break;
+        }
+    }while (!isExit);
+    return 0;
+}
