@@ -127,7 +127,7 @@ void Diary::edit(int id)
             break;
         }
 
-        case 3: // only for reminder
+        case 3:
         {
             std::cout << "Введите новое время (HH:MM): ";
             std::string time;
