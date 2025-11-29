@@ -30,4 +30,5 @@ add_executable(Diary main.cpp
         Commands/EditTextCommand.h
         Commands/EditDateCommand.h
         Commands/EditTimeCommand.h
+        Managers/Factory.h
 )

@@ -5,6 +5,7 @@
 #include "MainTypes/Note.h"
 #include "MainTypes/Event.h"
 #include "MainTypes/Reminder.h"
+#include "Managers/Factory.h"
 #include "Managers/SecurityManager.h"
 #include "Managers/InputManager.h"
 
@@ -63,7 +64,7 @@ int main() {
                 int id = InputManager::inputInt("ID: ", 0, 9999);
                 std::string title = InputManager::inputString("Заголовок: ");
                 std::string text = InputManager::inputString("Текст: ");
-                diary.add(new Note(id, title, text));
+                diary.add(makeItem<Note>(id, title, text));
                 break;
             }
             case 2:
@@ -86,7 +87,7 @@ int main() {
                     std::cout << "Неверная дата\nПроверьте не поставили ли Вы:\n -прошедшую дату\n -несуществующую дату\n -дату после 3000 года" << std::endl;
                 }
 
-                diary.add(new Event(id, title, (std::to_string(d) + "." + std::to_string(m) + "." + std::to_string(y))));
+                diary.add(makeItem<Event>(id, title, (std::to_string(d) + "." + std::to_string(m) + "." + std::to_string(y))));
                 break;
             }
             case 3:
@@ -115,7 +116,7 @@ int main() {
                     time = InputManager::inputString("Время оповещения: ");
                 }while (!InputManager::isValidTime(time));
 
-                diary.add(new Reminder(id, title, (std::to_string(d) + "." + std::to_string(m) + "." + std::to_string(y)),time));
+                diary.add(makeItem<Reminder>(id, title, (std::to_string(d) + "." + std::to_string(m) + "." + std::to_string(y)),time));
                 break;
             }
             case 4:
