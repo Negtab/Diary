@@ -1,6 +1,7 @@
 #include "Diary.h"
 
 #include <algorithm>
+#include <ctime>
 
 #include "Commands/AddCommand.h"
 #include "Commands/DeleteCommand.h"

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include "InputManager.h"
 
 int InputManager::inputInt(const std::string& prompt, const int minVal, const int maxVal) {
