@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 
 #include "MainTypes/Event.h"
 #include "MainTypes/Reminder.h"
