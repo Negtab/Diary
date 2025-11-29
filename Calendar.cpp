@@ -1,7 +1,3 @@
-//
-// Created by User on 26.11.2025.
-//
-
 #include "Calendar.h"
 
 #include <iostream>
@@ -29,7 +25,7 @@ int Calendar::dayOfWeek(int d, int m, int y) {
     int K = y % 100;
     int J = y / 100;
     int h = (d + 13*(m+1)/5 + K + K/4 + J/4 + 5*J) % 7;
-    return (h + 6) % 7; // 0 = Monday
+    return (h + 6) % 7;
 }
 
 bool Calendar::parseDate(const std::string& s, int &d, int &m, int &y)
@@ -60,7 +56,6 @@ void Calendar::printMonth(int m, int y, const std::vector<BaseComponent*>& items
     int firstDay = dayOfWeek(1, m, y);
     int dims = daysInMonth(m, y);
 
-    // Подготовим список меток * для дней с событиями
     std::vector<bool> marks(dims + 1, false);
 
     for (auto* item : items)
@@ -68,7 +63,7 @@ void Calendar::printMonth(int m, int y, const std::vector<BaseComponent*>& items
         if (auto* e = dynamic_cast<Event*>(item))
         {
             int dE, mE, yE;
-            if (parseDate(e->getDate(), dE, mE, yE)) // формат: D.M.Y
+            if (parseDate(e->getDate(), dE, mE, yE))
                 if (mE == m && yE == y && dE >= 1 && dE <= dims)
                     marks[dE] = true;
         }
@@ -81,17 +76,14 @@ void Calendar::printMonth(int m, int y, const std::vector<BaseComponent*>& items
         }
     }
 
-    // Печать пустых ячеек перед началом месяца
     for (int i = 0; i < firstDay; i++)
         std::cout << "    ";
 
-    // Печать дней
     for (int d = 1; d <= dims; d++)
     {
         bool isToday = (d == day && m == month && y == year);
         bool hasEvent = marks[d];
 
-        // Формируем текст ячейки (в пределах ширины 4 символов)
         std::stringstream cell;
 
         if (isToday)
@@ -101,7 +93,6 @@ void Calendar::printMonth(int m, int y, const std::vector<BaseComponent*>& items
         else
             cell << " " << d << " ";
 
-        // Если текст меньше 4 символов — добиваем пробелами
         std::string out = cell.str();
         while (out.size() < 4) out.push_back(' ');
 

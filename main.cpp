@@ -8,6 +8,7 @@
 #include "Managers/Factory.h"
 #include "Managers/SecurityManager.h"
 #include "Managers/InputManager.h"
+#include "Managers/StorageManager.h"
 
 int main() {
     SetConsoleOutputCP(CP_UTF8);

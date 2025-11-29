@@ -1,7 +1,3 @@
-//
-// Created by User on 26.11.2025.
-//
-
 #ifndef DIARY_COMMAND_H
 #define DIARY_COMMAND_H
 

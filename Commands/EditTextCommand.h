@@ -1,7 +1,3 @@
-//
-// Created by User on 28.11.2025.
-//
-
 #ifndef DIARY_EDITTEXTCOMMAND_H
 #define DIARY_EDITTEXTCOMMAND_H
 #include <string>
@@ -13,7 +9,6 @@ class EditTextCommand : public Command
     Note* note;
     std::string oldText;
     std::string newText;
-
 public:
     EditTextCommand(Note* n, const std::string& o, const std::string& s)
         : note(n), oldText(o), newText(s) {}

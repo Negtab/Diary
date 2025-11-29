@@ -13,7 +13,6 @@
 
 class Diary
 {
-    std::vector<Command*> history;
 public:
     Diary() = default;
     ~Diary();
@@ -35,6 +34,8 @@ public:
     void list() const;
 
     std::vector<BaseComponent*> items;
+private:
+    std::vector<Command*> history;
 };
 
 

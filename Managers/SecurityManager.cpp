@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-bool SecurityManager::login() {
+bool SecurityManager::login() const {
     std::string input;
     std::cout << "Введите пароль: ";
     std::cin >> input;

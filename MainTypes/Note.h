@@ -1,8 +1,6 @@
 #ifndef DIARY_NOTE_H
 #define DIARY_NOTE_H
 
-#include <utility>
-
 #include "DataComponent.h"
 #include "Event.h"
 
@@ -10,7 +8,7 @@ class Note : public DataComponent
 {
     std::string text;
 public:
-    Note(int id, const std::string& title, std::string  text) : DataComponent(id, title), text(std::move(text)) {}
+    Note(int id, const std::string& title, const std::string &text) : DataComponent(id, title), text(text) {}
 
     explicit Note(const Event & event);
 

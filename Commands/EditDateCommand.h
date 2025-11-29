@@ -1,7 +1,3 @@
-//
-// Created by User on 28.11.2025.
-//
-
 #ifndef DIARY_EDITDATACOMMAND_H
 #define DIARY_EDITDATACOMMAND_H
 
@@ -13,7 +9,6 @@ class EditDateCommand : public Command
     DataComponent* item;
     std::string oldDate;
     std::string newDate;
-
 public:
     EditDateCommand(BaseComponent* i, const std::string& o, const std::string& n)
         : item(dynamic_cast<DataComponent*>(i)), oldDate(o), newDate(n) {}

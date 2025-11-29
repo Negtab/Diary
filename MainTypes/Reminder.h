@@ -1,21 +1,15 @@
-//
-// Created by User on 26.11.2025.
-//
-
 #ifndef DIARY_REMINDER_H
 #define DIARY_REMINDER_H
 
 #include "DataComponent.h"
 #include <string>
-#include <utility>
-
 class Reminder : public DataComponent
 {
     std::string time;
     std::string date;
 public:
-    Reminder(const int id, const std::string &title, std::string date, std::string time) :
-            DataComponent(id, title), time(std::move(time)), date(std::move(date)) {}
+    Reminder(const int id, const std::string &title, const std::string &date, const std::string &time) :
+            DataComponent(id, title), time(time), date(date) {}
 
     [[nodiscard]] BaseComponent* clone() const override { return new Reminder(*this); }
 

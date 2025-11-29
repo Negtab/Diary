@@ -4,7 +4,8 @@
 #include <utility>
 
 template<typename T, typename... Args>
-T* makeItem(Args&&... args) {
+T* makeItem(Args&&... args)
+{
     return new T(std::forward<Args>(args)...);
 }
 

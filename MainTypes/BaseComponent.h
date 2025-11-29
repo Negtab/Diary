@@ -1,7 +1,3 @@
-//
-// Created by User on 26.11.2025.
-//
-
 #ifndef DIARY_BASECOMPONENT_H
 #define DIARY_BASECOMPONENT_H
 
