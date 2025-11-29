@@ -10,7 +10,7 @@
 class Diary
 {
 public:
-    Diary() = default;
+    Diary();
     ~Diary();
 
     void add(BaseComponent* item);

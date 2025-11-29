@@ -14,7 +14,15 @@ public:
     static void saveTxt(const std::vector<BaseComponent*>& items, const std::string& filename = "save.txt");
     static void loadTxt(std::vector<BaseComponent*>& items, const std::string& filename = "save.txt");
 
-    static void savePassword(const std::string& pass, const std::string& path = "password.dat");
+    static void saveRemindersTxt(const std::vector<BaseComponent*>& items, const std::string& filename = "rem.txt");
+    static void saveNotesTxt(const std::vector<BaseComponent*>& items, const std::string& filename = "note.txt");
+    static void saveEventsTxt(const std::vector<BaseComponent*>& items, const std::string& filename = "event.txt");
+
+    static void loadRemindersTxt(std::vector<BaseComponent*>& items, const std::string& filename = "rem.txt");
+    static void loadNotesTxt(std::vector<BaseComponent*>& items, const std::string& filename = "note.txt");
+    static void loadEventsTxt(std::vector<BaseComponent*>& items, const std::string& filename = "event.txt");
+
+    static void savePassword(const std::string &name, const std::string& pass, const std::string& path = "password.dat");
     static std::string loadPassword(const std::string& path = "password.dat");
 private:
     static std::string xorCrypt(const std::string& data, const std::string& key);

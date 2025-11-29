@@ -17,9 +17,22 @@
 #include "MainTypes/Note.h"
 #include "MainTypes/Reminder.h"
 #include "Managers/InputManager.h"
+#include "Managers/StorageManager.h"
+
+Diary::Diary()
+{
+    StorageManager::loadNotesTxt(items);
+    StorageManager::loadEventsTxt(items);
+    StorageManager::loadRemindersTxt(items);
+    showReminder();
+}
 
 Diary::~Diary()
 {
+    StorageManager::saveNotesTxt(items);
+    StorageManager::saveEventsTxt(items);
+    StorageManager::saveRemindersTxt(items);
+
     for (auto* i : items)
         delete i;
     for (auto* c : history)
@@ -196,7 +209,7 @@ void Diary::clearInternal()
 
 void Diary::list() const {
     for (auto* i : items)
-        std::cout << i->getInfo() << "\n";
+        std::cout << "[ID] " << i->getId() << " " << i->getInfo() << "\n";
 }
 
 void Diary::showReminder()
@@ -243,7 +256,7 @@ void Diary::showReminder()
         if (day == dayCur && month == monthCur && year == yearCur)
         {
             bool passed =
-                (hour < hourCur) ||
+                (hour > hourCur) ||
                 (hour == hourCur && minute <= minuteCur);
 
             if (passed)

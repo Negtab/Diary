@@ -202,10 +202,153 @@ void StorageManager::loadTxt(std::vector<BaseComponent*>& items, const std::stri
     }
 }
 
-void StorageManager::savePassword(const std::string& pass, const std::string& path)
+void StorageManager::saveRemindersTxt(const std::vector<BaseComponent*>& items, const std::string& filename)
+{
+    std::ofstream out(filename);
+    if (!out.is_open()) {
+        std::cerr << "Error: cannot open " << filename << " for writing\n";
+        return;
+    }
+
+    for (auto* i : items)
+        if (i->getInfo().find("[REMINDER] ") != std::string::npos)
+            out << i->getInfo() << "\n";
+}
+
+void StorageManager::loadRemindersTxt(std::vector<BaseComponent *> &items, const std::string &filename)
+{
+    std::ifstream in(filename);
+    if (!in.is_open()) {
+        std::cerr << "Error: cannot open " << filename << "\n";
+        return;
+    }
+
+    std::string line;
+    while (std::getline(in, line))
+    {
+        if (line.size() < 3) continue;
+        if (line[0] != '[') continue;
+
+        size_t endTag = line.find(']');
+        if (endTag == std::string::npos) continue;
+
+        std::string tag = line.substr(0, endTag + 1);
+        std::string rest = (endTag + 2 < line.size()) ? line.substr(endTag + 2) : "";
+
+        if (tag == "[REMINDER]") {
+
+            size_t sep1 = rest.find(" -> ");
+            size_t sep2 = rest.find(" -> ", sep1 + 4);
+
+            if (sep1 == std::string::npos || sep2 == std::string::npos)
+                continue;
+
+            std::string title = rest.substr(0, sep1);
+            std::string date  = rest.substr(sep1 + 4, sep2 - (sep1 + 4));
+            std::string time  = rest.substr(sep2 + 4);
+
+            items.push_back(new Reminder(rand() % 100000, title, date, time));
+        }
+    }
+}
+
+void StorageManager::saveNotesTxt(const std::vector<BaseComponent*>& items, const std::string& filename)
+{
+    std::ofstream out(filename);
+    if (!out.is_open()) {
+        std::cerr << "Error: cannot open " << filename << " for writing\n";
+        return;
+    }
+
+    for (auto* i : items)
+        if (i->getInfo().find("[NOTE] ") != std::string::npos)
+            out << i->getInfo() << "\n";
+}
+
+void StorageManager::loadNotesTxt(std::vector<BaseComponent*>& items, const std::string& filename)
+{
+    std::ifstream in(filename);
+    if (!in.is_open()) {
+        std::cerr << "Error: cannot open " << filename << "\n";
+        return;
+    }
+
+    std::string line;
+    while (std::getline(in, line))
+    {
+        if (line.size() < 3) continue;
+        if (line[0] != '[') continue;
+
+        size_t endTag = line.find(']');
+        if (endTag == std::string::npos) continue;
+
+        std::string tag = line.substr(0, endTag + 1);
+        std::string rest = (endTag + 2 < line.size()) ? line.substr(endTag + 2) : "";
+
+        if (tag == "[NOTE]") {
+
+            size_t colon = rest.find(':');
+            if (colon == std::string::npos) continue;
+
+            std::string title = rest.substr(0, colon);
+            std::string text  = (colon + 2 < rest.size()) ? rest.substr(colon + 2) : "";
+
+            items.push_back(new Note(rand() % 100000, title, text));
+        }
+    }
+}
+
+void StorageManager::saveEventsTxt(const std::vector<BaseComponent*>& items, const std::string& filename)
+{
+    std::ofstream out(filename);
+    if (!out.is_open()) {
+        std::cerr << "Error: cannot open " << filename << " for writing\n";
+        return;
+    }
+
+    for (auto* i : items)
+        if (i->getInfo().find("[EVENT] ") != std::string::npos)
+            out << i->getInfo() << "\n";
+}
+
+void StorageManager::loadEventsTxt(std::vector<BaseComponent*>& items, const std::string& filename)
+{
+    std::ifstream in(filename);
+    if (!in.is_open()) {
+        std::cerr << "Error: cannot open " << filename << "\n";
+        return;
+    }
+
+    std::string line;
+    while (std::getline(in, line))
+    {
+        if (line.size() < 3) continue;
+        if (line[0] != '[') continue;
+
+        size_t endTag = line.find(']');
+        if (endTag == std::string::npos) continue;
+
+        std::string tag = line.substr(0, endTag + 1);
+        std::string rest = (endTag + 2 < line.size()) ? line.substr(endTag + 2) : "";
+
+
+        if (tag == "[EVENT]") {
+
+            size_t at = rest.find(" at ");
+            if (at == std::string::npos) continue;
+
+            std::string title = rest.substr(0, at);
+            std::string date  = rest.substr(at + 4);
+
+            items.push_back(new Event(rand() % 100000, title, date));
+        }
+    }
+}
+
+void StorageManager::savePassword(const std::string &name, const std::string& pass, const std::string& path)
 {
     std::ofstream f(path, std::ios::binary);
-    std::string enc = xorCrypt(pass, "my_secret_key");
+    std::string enc = xorCrypt(name + "\n" + pass, "my_secret_key");
     f << enc;
 }
 
@@ -213,10 +356,11 @@ std::string StorageManager::loadPassword(const std::string& path)
 {
     std::ifstream f(path, std::ios::binary);
     if (!f)
-        return "1234";
+        return "a\n1234";
 
-    std::string enc;
-    std::getline(f, enc);
-    return xorCrypt(enc, "my_secret_key");
+    std::string log, pas;
+    std::getline(f, log);
+    std::getline(f, pas);
+    return xorCrypt(log + "\n" + pas, "my_secret_key");
 }
 
