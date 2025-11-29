@@ -2,6 +2,7 @@
 #include "StorageManager.h"
 
 #include <iostream>
+#include <limits>
 
 bool SecurityManager::login() const {
     std::string log, pas;
@@ -16,9 +17,12 @@ void SecurityManager::changeName(const std::string &path)
 {
     std::string buff = StorageManager::loadPassword(path);
     std::string oldLog = buff.substr(0, buff.find('\n'));
-    std::string oldPass = buff.substr(buff.find('\n') + 1, buff.size() - buff.find('\n') - 2);
+    std::string oldPass = buff.substr(buff.find('\n') + 1);
 
     std::string input;
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
     std::cout << "Введите текущий логин: ";
     std::getline(std::cin, input);
 
@@ -66,9 +70,11 @@ void SecurityManager::changePassword(const std::string& path)
 {
     std::string buff = StorageManager::loadPassword(path);
     std::string oldLog = buff.substr(0, buff.find('\n'));
-    std::string oldPass = buff.substr(buff.find('\n') + 1, buff.size() - buff.find('\n') - 2);
+    std::string oldPass = buff.substr(buff.find('\n') + 1);
 
     std::string input;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
     std::cout << "Введите текущий логин: ";
     std::getline(std::cin, input);
 
@@ -114,5 +120,5 @@ void SecurityManager::loadPassword()
 {
     std::string buf = StorageManager::loadPassword();
     name = buf.substr(0, buf.find('\n'));
-    password = buf.substr(buf.find('\n') + 1, buf.size() - buf.find('\n') - 2);
+    password = buf.substr(buf.find('\n') + 1);
 }

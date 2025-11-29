@@ -19,7 +19,7 @@ int main() {
 
     if (!sec.login())
     {
-        std::cout << "Неверный пароль.\n";
+        std::cout << "Неверный логин или пароль.\n";
         return 0;
     }
 

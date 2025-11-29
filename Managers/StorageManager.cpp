@@ -348,9 +348,11 @@ void StorageManager::loadEventsTxt(std::vector<BaseComponent*>& items, const std
 void StorageManager::savePassword(const std::string &name, const std::string& pass, const std::string& path)
 {
     std::ofstream f(path, std::ios::binary);
-    std::string enc = xorCrypt(name + "\n" + pass, "my_secret_key");
-    f << enc;
+    std::string plain = name + "\n" + pass;
+    std::string enc = xorCrypt(plain, "my_secret_key");
+    f.write(enc.data(), enc.size());
 }
+
 
 std::string StorageManager::loadPassword(const std::string& path)
 {
@@ -358,9 +360,9 @@ std::string StorageManager::loadPassword(const std::string& path)
     if (!f)
         return "a\n1234";
 
-    std::string log, pas;
-    std::getline(f, log);
-    std::getline(f, pas);
-    return xorCrypt(log + "\n" + pas, "my_secret_key");
+    std::string enc((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+
+    std::string dec = xorCrypt(enc, "my_secret_key");
+    return dec;
 }
 
