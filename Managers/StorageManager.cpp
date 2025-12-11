@@ -219,7 +219,7 @@ void StorageManager::loadRemindersTxt(std::vector<BaseComponent *> &items, const
 {
     std::ifstream in(filename);
     if (!in.is_open()) {
-        std::cerr << "Error: cannot open " << filename << "\n";
+        //std::cerr << "Error: cannot open " << filename << "\n";
         return;
     }
 
@@ -269,7 +269,7 @@ void StorageManager::loadNotesTxt(std::vector<BaseComponent*>& items, const std:
 {
     std::ifstream in(filename);
     if (!in.is_open()) {
-        std::cerr << "Error: cannot open " << filename << "\n";
+        //std::cerr << "Error: cannot open " << filename << "\n";
         return;
     }
 
@@ -315,7 +315,7 @@ void StorageManager::loadEventsTxt(std::vector<BaseComponent*>& items, const std
 {
     std::ifstream in(filename);
     if (!in.is_open()) {
-        std::cerr << "Error: cannot open " << filename << "\n";
+        //std::cerr << "Error: cannot open " << filename << "\n";
         return;
     }
 
